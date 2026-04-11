@@ -557,6 +557,9 @@ var T = {
     shareTitle:'सोशल मीडिया पर शेयर करें',
     reviewsTitle:'समीक्षाएं',addReviewTitle:'समीक्षा दें',reviewPlaceholder:'अपनी समीक्षा लिखें...',namePlaceholder:'आपका नाम',submitReview:'समीक्षा जमा करें',
     errName:'कृपया व्यापार का नाम भरें।',errPhone:'कृपया फोन नंबर भरें।',
+    errLoc:'कृपया शहर / स्थान भरें।',errCat:'कृपया श्रेणी चुनें।',errTeam:'कृपया टीम का आकार चुनें।',
+    errOffers:'कृपया कम से कम एक सेवा या उत्पाद जोड़ें।',errSpecs:'कृपया कम से कम एक विशेषता जोड़ें।',
+    errPhoneInvalid:'कृपया एक मान्य फोन नंबर दर्ज करें।',errEmailInvalid:'कृपया एक मान्य ईमेल पता दर्ज करें।',
     successPub:'आपकी दुकान प्रकाशित हो गई! अब इसे सभी देख सकते हैं।',
     toastCopied:'लिंक कॉपी हो गया!',toastReview:'आपकी समीक्षा जुड़ गई!',
     detailAbout:'के बारे में',detailOffers:'हम क्या देते हैं',detailSpec:'विशेषताएं',detailContact:'संपर्क',detailDetails:'विवरण',
@@ -605,6 +608,9 @@ var T = {
     shareTitle:'Share on Social Media',
     reviewsTitle:'Reviews',addReviewTitle:'Leave a Review',reviewPlaceholder:'Write your review...',namePlaceholder:'Your name',submitReview:'Submit Review',
     errName:'Please enter your business name.',errPhone:'Please enter a phone number.',
+    errLoc:'Please enter your city / location.',errCat:'Please select a category.',errTeam:'Please select a team size.',
+    errOffers:'Please add at least one service or product.',errSpecs:'Please add at least one speciality.',
+    errPhoneInvalid:'Please enter a valid phone number.',errEmailInvalid:'Please enter a valid email address.',
     successPub:'Your shop is now live! Everyone can see it.',
     toastCopied:'Link copied!',toastReview:'Your review has been added!',
     detailAbout:'About',detailOffers:'What We Offer',detailSpec:'Specialities',detailContact:'Contact',detailDetails:'Details',
@@ -653,6 +659,9 @@ var T = {
     shareTitle:'सोशल मीडियावर शेअर करा',
     reviewsTitle:'समीक्षा',addReviewTitle:'समीक्षा द्या',reviewPlaceholder:'आपली समीक्षा लिहा...',namePlaceholder:'आपले नाव',submitReview:'समीक्षा सादर करा',
     errName:'कृपया व्यवसायाचे नाव भरा.',errPhone:'कृपया फोन नंबर भरा.',
+    errLoc:'कृपया शहर / ठिकाण भरा.',errCat:'कृपया श्रेणी निवडा.',errTeam:'कृपया संघाचा आकार निवडा.',
+    errOffers:'कृपया किमान एक सेवा किंवा उत्पादन जोडा.',errSpecs:'कृपया किमान एक विशेषता जोडा.',
+    errPhoneInvalid:'कृपया एक वैध फोन नंबर प्रविष्ट करा.',errEmailInvalid:'कृपया एक वैध ईमेल पत्ता प्रविष्ट करा.',
     successPub:'आपले दुकान प्रकाशित झाले! आता सर्व पाहू शकतात.',
     toastCopied:'लिंक कॉपी झाली!',toastReview:'आपली समीक्षा जोडली गेली!',
     detailAbout:'बद्दल',detailOffers:'आम्ही काय देतो',detailSpec:'विशेषता',detailContact:'संपर्क',detailDetails:'तपशील',
@@ -1112,27 +1121,76 @@ function removeFormTag(s, displayId){
   });
 });
 
+function setFieldError(id, hasError){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.style.borderColor = hasError ? 'var(--red)' : '';
+  el.style.boxShadow  = hasError ? '0 0 0 2px rgba(192,57,43,0.15)' : '';
+}
+function clearFieldErrors(){
+  ['f-vname','f-loc','f-cat','f-team','f-phone','f-email'].forEach(function(id){ setFieldError(id, false); });
+  ['f-offers-tags','f-specs-tags'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el){ el.style.outline=''; }
+  });
+}
+
 function publishVendor(){
   if(!requireGoogleLogin()) return;
-  var name = (document.getElementById('f-vname').value||'').trim();
+  clearFieldErrors();
+
+  var name  = (document.getElementById('f-vname').value||'').trim();
+  var loc   = (document.getElementById('f-loc').value||'').trim();
+  var cat   = (document.getElementById('f-cat').value||'').trim();
+  var team  = (document.getElementById('f-team').value||'').trim();
   var phone = (document.getElementById('f-phone').value||'').trim();
-  var msg = document.getElementById('form-success');
-  if(!name){msg.textContent=t('errName');msg.style.color='var(--red)';setTimeout(function(){msg.textContent='';},3000);return;}
-  if(!phone){msg.textContent=t('errPhone');msg.style.color='var(--red)';setTimeout(function(){msg.textContent='';},3000);return;}
+  var email = (document.getElementById('f-email').value||'').trim();
+  var msg   = document.getElementById('form-success');
+
+  function showErr(errKey, fieldId, tagsId){
+    msg.textContent = t(errKey);
+    msg.style.color = 'var(--red)';
+    if(fieldId) setFieldError(fieldId, true);
+    if(tagsId){
+      var el = document.getElementById(tagsId);
+      if(el) el.style.outline = '2px solid var(--red)';
+    }
+    setTimeout(function(){ msg.textContent=''; clearFieldErrors(); }, 3500);
+  }
+
+  // ── Required text/select fields ──
+  if(!name)  return showErr('errName',  'f-vname');
+  if(!loc)   return showErr('errLoc',   'f-loc');
+  if(!cat)   return showErr('errCat',   'f-cat');
+  if(!team)  return showErr('errTeam',  'f-team');
+
+  // ── Tags (at least one each) ──
+  if(fOffersList.length === 0) return showErr('errOffers', null, 'f-offers-tags');
+  if(fSpecsList.length  === 0) return showErr('errSpecs',  null, 'f-specs-tags');
+
+  // ── Phone — required + valid format ──
+  if(!phone) return showErr('errPhone', 'f-phone');
+  var phoneClean = phone.replace(/[\s\-().+]/g,'');
+  if(!/^\d{7,15}$/.test(phoneClean)) return showErr('errPhoneInvalid', 'f-phone');
+
+  // ── Email — optional but must be valid if provided ──
+  if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showErr('errEmailInvalid', 'f-email');
+
+  // ── All good — publish ──
   var newV = {
     id:'v'+Date.now(),
     name:name,
     tagline:(document.getElementById('f-tagline').value||'').trim(),
-    cat:(document.getElementById('f-cat').value||'अन्य'),
-    loc:(document.getElementById('f-loc').value||'').trim(),
+    cat:cat,
+    loc:loc,
     year:(document.getElementById('f-year').value||'').trim(),
-    team:(document.getElementById('f-team').value||'').trim(),
+    team:team,
     desc:(document.getElementById('f-desc').value||'').trim(),
     offers:[...fOffersList],
     specs:[...fSpecsList],
     phone:phone,
     wa:(document.getElementById('f-wa').value||'').trim(),
-    email:(document.getElementById('f-email').value||'').trim(),
+    email:email,
     web:(document.getElementById('f-web').value||'').trim(),
     reviews:[],
     ownerId: currentUser ? currentUser.id : null
