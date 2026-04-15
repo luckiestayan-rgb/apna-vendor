@@ -92,10 +92,10 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
 .detail-tags{display:flex;flex-wrap:wrap;gap:5px;}
 .detail-tag{background:#E1F5EE;color:#085041;font-size:12px;padding:3px 10px;border-radius:9px;}
 .detail-spec-tag{background:#EEEDFE;color:#3C3489;font-size:12px;padding:3px 10px;border-radius:9px;}
-.contact-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);}
+.contact-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border);gap:8px;}
 .contact-row:last-child{border-bottom:none;}
-.contact-lbl{color:var(--muted);flex-shrink:0;margin-right:8px;}
-.contact-val{font-weight:500;color:var(--text);text-align:right;word-break:break-all;}
+.contact-lbl{color:var(--muted);flex-shrink:0;white-space:nowrap;}
+.contact-val{font-weight:500;color:var(--text);text-align:right;word-break:break-word;min-width:0;flex:1;}
  
 /* SHARE */
 .share-section{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:16px;}
@@ -181,12 +181,7 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
 .loc-suggestion-state{font-size:11px;color:var(--muted);}
 .map-picker-wrap{margin-top:8px;}
 .map-hint{font-size:11px;color:var(--muted);margin-bottom:5px;}
-#vendor-map-picker{width:100%;height:200px;border-radius:8px;border:1px solid var(--border);overflow:hidden;position:relative;z-index:0;}
-/* Keep Leaflet below nav (z-index:300) */
-#vendor-map-picker .leaflet-pane{z-index:1 !important;}
-#vendor-map-picker .leaflet-top,
-#vendor-map-picker .leaflet-bottom{z-index:2 !important;}
-#vendor-map-picker .leaflet-control{z-index:2 !important;}
+#vendor-map-picker{width:100%;height:200px;border-radius:8px;border:1px solid var(--border);overflow:hidden;}
 .map-coords{font-size:11px;color:var(--green);margin-top:4px;min-height:16px;}
  
 /* ABOUT */
@@ -213,9 +208,9 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
 .confirm-ok:hover{opacity:0.85;}
  
 /* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.7);z-index:200;overflow-y:auto;padding:16px;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,0.7);z-index:200;overflow-y:auto;padding:80px 16px 24px;}
 .modal-overlay.open{display:flex;align-items:flex-start;justify-content:center;}
-.modal{background:var(--cream);border-radius:18px;width:100%;max-width:860px;padding:24px;position:relative;margin:auto;}
+.modal{background:var(--cream);border-radius:18px;width:100%;max-width:860px;padding:24px;position:relative;margin:0 auto 24px;}
 .modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);line-height:1;padding:4px;}
  
 /* SEARCH */
@@ -380,7 +375,7 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
             <div class="field">
               <label id="fl-loc">शहर / स्थान <span class="req">*</span></label>
               <div class="loc-input-wrap">
-                <input type="text" class="loc-text-input" id="f-loc-text" placeholder="जैसे: 14 MG Road, Andheri West, Mumbai 400058" autocomplete="off">
+                <input type="text" class="loc-text-input" id="f-loc-text" placeholder="जैसे: Andheri, Mumbai, Maharashtra" autocomplete="off">
                 <div class="loc-suggestions" id="loc-suggestions"></div>
               </div>
               <input type="hidden" id="f-loc-value">
@@ -503,7 +498,7 @@ var T = {
     flVname:'व्यापार का नाम', flTagline:'टैगलाइन', flCat:'श्रेणी', flLoc:'शहर / स्थान', flYear:'स्थापना वर्ष', flTeam:'टीम का आकार',
     flDesc:'अपनी दुकान के बारे में बताएं', flOffers:'सेवा या उत्पाद जोड़ें', flSpec:'आप क्यों खास हैं?',
     flPhone:'फोन नंबर', flWa:'WhatsApp', flEmail:'ईमेल', flWeb:'वेबसाइट',
-    flMap:'📍 नक्शे पर क्लिक करें — सटीक पता अपने आप भर जाएगा (वैकल्पिक)',
+    flMap:'📍 नक्शे पर अपना सटीक स्थान चुनें (वैकल्पिक) — क्लिक करें',
     fbtnOffer:'+ जोड़ें', fbtnSpec:'+ जोड़ें',
     publishBtn:'मेरी दुकान प्रकाशित करें', updateBtn:'बदलाव सहेजें',
     searchPlaceholder:'दुकान या सेवा खोजें...',
@@ -562,7 +557,7 @@ var T = {
     flVname:'Business Name', flTagline:'Tagline', flCat:'Category', flLoc:'City / Location', flYear:'Est. Year', flTeam:'Team Size',
     flDesc:'Describe your shop', flOffers:'Add a service or product', flSpec:'What makes you stand out?',
     flPhone:'Phone Number', flWa:'WhatsApp', flEmail:'Email', flWeb:'Website',
-    flMap:'📍 Click on the map — exact address auto-fills (optional)',
+    flMap:'📍 Pin your exact stall location on the map (optional) — click to place',
     fbtnOffer:'+ Add', fbtnSpec:'+ Add',
     publishBtn:'Publish My Profile', updateBtn:'Save Changes',
     searchPlaceholder:'Search shops or services...',
@@ -621,7 +616,7 @@ var T = {
     flVname:'व्यवसायाचे नाव', flTagline:'टॅगलाइन', flCat:'श्रेणी', flLoc:'शहर / ठिकाण', flYear:'स्थापना वर्ष', flTeam:'संघाचा आकार',
     flDesc:'आपल्या दुकानाबद्दल सांगा', flOffers:'सेवा किंवा उत्पादन जोडा', flSpec:'तुम्ही विशेष का आहात?',
     flPhone:'फोन नंबर', flWa:'WhatsApp', flEmail:'ईमेल', flWeb:'वेबसाइट',
-    flMap:'📍 नकाशावर क्लिक करा — अचूक पत्ता आपोआप भरला जाईल (पर्यायी)',
+    flMap:'📍 नकाशावर तुमचे अचूक ठिकाण निवडा (पर्यायी) — क्लिक करा',
     fbtnOffer:'+ जोडा', fbtnSpec:'+ जोडा',
     publishBtn:'माझे दुकान प्रकाशित करा', updateBtn:'बदल जतन करा',
     searchPlaceholder:'दुकान किंवा सेवा शोधा...',
@@ -735,171 +730,130 @@ function updateStats(){
   if(se) se.textContent = Object.keys(locs).length||0;
 }
  
-// Location data removed — using Nominatim (OpenStreetMap) for live search and reverse geocoding
+// ── INDIA LOCATIONS DATA ──
+var INDIA_LOCS = {
+  'Andaman & Nicobar Islands':['Port Blair'],
+  'Andhra Pradesh':['Visakhapatnam','Vijayawada','Guntur','Nellore','Kurnool','Kakinada','Tirupati','Rajahmundry'],
+  'Arunachal Pradesh':['Itanagar','Naharlagun','Pasighat'],
+  'Assam':['Guwahati','Silchar','Dibrugarh','Jorhat','Nagaon','Tinsukia'],
+  'Bihar':['Patna','Gaya','Muzaffarpur','Bhagalpur','Darbhanga','Arrah','Begusarai'],
+  'Chandigarh':['Chandigarh'],
+  'Chhattisgarh':['Raipur','Bhilai','Bilaspur','Durg','Korba','Rajnandgaon'],
+  'Dadra & Nagar Haveli':['Silvassa'],
+  'Daman & Diu':['Daman','Diu'],
+  'Delhi':['New Delhi','Central Delhi','North Delhi','South Delhi','East Delhi','West Delhi','Dwarka','Rohini','Janakpuri','Laxmi Nagar','Saket','Pitampura'],
+  'Goa':['Panaji','Margao','Vasco da Gama','Mapusa','Ponda'],
+  'Gujarat':['Ahmedabad','Surat','Vadodara','Rajkot','Bhavnagar','Jamnagar','Gandhinagar','Anand','Morbi'],
+  'Haryana':['Faridabad','Gurugram','Panipat','Ambala','Yamunanagar','Hisar','Rohtak','Karnal','Sonipat'],
+  'Himachal Pradesh':['Shimla','Dharamshala','Solan','Mandi','Kullu','Manali'],
+  'Jammu & Kashmir':['Srinagar','Jammu','Anantnag','Baramulla','Sopore'],
+  'Jharkhand':['Ranchi','Jamshedpur','Dhanbad','Bokaro','Deoghar','Hazaribagh'],
+  'Karnataka':['Bengaluru','Mysuru','Hubli','Mangaluru','Belagavi','Davangere','Ballari','Kalaburagi'],
+  'Kerala':['Thiruvananthapuram','Kochi','Kozhikode','Thrissur','Kollam','Palakkad','Malappuram','Kannur'],
+  'Ladakh':['Leh','Kargil'],
+  'Lakshadweep':['Kavaratti'],
+  'Madhya Pradesh':['Bhopal','Indore','Jabalpur','Gwalior','Ujjain','Sagar','Dewas','Satna','Ratlam'],
+  'Maharashtra':['Mumbai — Andheri','Mumbai — Bandra','Mumbai — Borivali','Mumbai — Chembur','Mumbai — Colaba','Mumbai — CST / Fort','Mumbai — Dahisar','Mumbai — Dadar','Mumbai — Dharavi','Mumbai — Ghatkopar','Mumbai — Goregaon','Mumbai — Juhu','Mumbai — Kandivali','Mumbai — Kurla','Mumbai — Lower Parel','Mumbai — Mahim','Mumbai — Malad','Mumbai — Matunga','Mumbai — Mulund','Mumbai — Powai','Mumbai — Santacruz','Mumbai — Versova','Mumbai — Vikhroli','Mumbai — Vile Parle','Mumbai — Worli','Mumbai — Jogeshwari','Pune','Nagpur','Nashik','Aurangabad','Solapur','Amravati','Kolhapur','Thane','Navi Mumbai'],
+  'Manipur':['Imphal','Thoubal','Bishnupur'],
+  'Meghalaya':['Shillong','Tura','Jowai'],
+  'Mizoram':['Aizawl','Lunglei'],
+  'Nagaland':['Kohima','Dimapur','Mokokchung'],
+  'Odisha':['Bhubaneswar','Cuttack','Rourkela','Brahmapur','Sambalpur','Puri'],
+  'Puducherry':['Puducherry','Karaikal','Mahe','Yanam'],
+  'Punjab':['Ludhiana','Amritsar','Jalandhar','Patiala','Bathinda','Pathankot','Hoshiarpur'],
+  'Rajasthan':['Jaipur','Jodhpur','Kota','Bikaner','Ajmer','Udaipur','Bhilwara','Alwar'],
+  'Sikkim':['Gangtok','Namchi','Mangan'],
+  'Tamil Nadu':['Chennai','Coimbatore','Madurai','Tiruchirappalli','Salem','Tirunelveli','Tiruppur','Vellore','Erode'],
+  'Telangana':['Hyderabad','Warangal','Nizamabad','Karimnagar','Khammam','Ramagundam'],
+  'Tripura':['Agartala','Udaipur','Dharmanagar'],
+  'Uttar Pradesh':['Lucknow','Kanpur','Agra','Varanasi','Prayagraj','Ghaziabad','Noida','Meerut','Bareilly','Aligarh','Moradabad','Saharanpur'],
+  'Uttarakhand':['Dehradun','Haridwar','Roorkee','Haldwani','Rishikesh','Nainital','Mussoorie'],
+  'West Bengal':['Kolkata','Howrah','Asansol','Siliguri','Durgapur','Bardhaman','Malda']
+};
  
+// Build flat search list: [{display, value, state}]
+var LOC_LIST = [];
+Object.keys(INDIA_LOCS).sort().forEach(function(state){
+  INDIA_LOCS[state].forEach(function(city){
+    LOC_LIST.push({display: city + ', ' + state, city: city, state: state});
+  });
+});
  
- 
-// ── LOCATION AUTOCOMPLETE (Nominatim / OpenStreetMap) ──
-var _locDebounce = null;
-var _locXhr = null;
- 
+// ── LOCATION AUTOCOMPLETE ──
+var _locSelectedFromDropdown = false;
 function initLocationField(textId, hiddenId, suggestId){
   var inp = document.getElementById(textId);
-  var hid = document.getElementById(hiddenId || 'f-loc-value');
-  var sug = document.getElementById(suggestId || 'loc-suggestions');
+  var hid = document.getElementById(hiddenId||'f-loc-value');
+  var sug = document.getElementById(suggestId||'loc-suggestions');
   if(!inp) return;
- 
   inp.addEventListener('input', function(){
-    hid.value = inp.value; // always keep hidden in sync with free text
-    clearTimeout(_locDebounce);
-    var q = inp.value.trim();
-    if(q.length < 3){ sug.style.display='none'; return; }
-    _locDebounce = setTimeout(function(){ fetchLocSuggestions(q, inp, hid, sug); }, 350);
+    _locSelectedFromDropdown = false;
+    hid.value = inp.value; // allow free text too
+    var q = inp.value.trim().toLowerCase();
+    if(q.length < 1){ sug.style.display='none'; return; }
+    var matches = LOC_LIST.filter(function(l){ return l.display.toLowerCase().includes(q); }).slice(0,10);
+    if(!matches.length){ sug.style.display='none'; return; }
+    sug.innerHTML = matches.map(function(l,i){
+      return '<div class="loc-suggestion" data-val="'+l.display+'" data-idx="'+i+'">'+
+        '<strong>'+l.city+'</strong><span class="loc-suggestion-state">, '+l.state+'</span></div>';
+    }).join('');
+    sug.style.display='block';
   });
- 
-  // Close on outside click
+  sug.addEventListener('mousedown', function(e){
+    var item = e.target.closest('.loc-suggestion');
+    if(!item) return;
+    var val = item.getAttribute('data-val');
+    inp.value = val; hid.value = val;
+    _locSelectedFromDropdown = true;
+    sug.style.display='none';
+    initMapPicker(val);
+  });
   document.addEventListener('click', function(e){
-    if(!inp.contains(e.target) && !sug.contains(e.target)) sug.style.display='none';
+    if(!inp.contains(e.target)&&!sug.contains(e.target)) sug.style.display='none';
   });
 }
- 
-function fetchLocSuggestions(q, inp, hid, sug){
-  // Use Nominatim to search for addresses in India
-  var url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=8&countrycodes=in&q='+encodeURIComponent(q);
-  fetch(url, {headers:{'Accept-Language': 'en'}})
-    .then(function(r){ return r.json(); })
-    .then(function(results){
-      if(!results||!results.length){ sug.style.display='none'; return; }
-      sug.innerHTML = results.map(function(r){
-        var addr = formatNominatimAddress(r);
-        return '<div class="loc-suggestion" data-full="'+escHtml(addr)+'" data-lat="'+r.lat+'" data-lng="'+r.lon+'">'+
-          '<div style="font-weight:600;font-size:13px;">'+escHtml(r.display_name.split(',')[0])+'</div>'+
-          '<div class="loc-suggestion-state">'+escHtml(addr)+'</div>'+
-          '</div>';
-      }).join('');
-      sug.style.display='block';
-      sug.querySelectorAll('.loc-suggestion').forEach(function(item){
-        item.addEventListener('mousedown', function(e){
-          e.preventDefault();
-          var full = item.getAttribute('data-full');
-          var lat = item.getAttribute('data-lat');
-          var lng = item.getAttribute('data-lng');
-          inp.value = full; hid.value = full;
-          sug.style.display='none';
-          // Store coords and update map
-          document.getElementById('f-lat').value = parseFloat(lat).toFixed(6);
-          document.getElementById('f-lng').value = parseFloat(lng).toFixed(6);
-          document.getElementById('vendor-map-coords').textContent = '📍 '+full;
-          initMapPicker(lat, lng, 16);
-        });
-      });
-    })
-    .catch(function(){ sug.style.display='none'; });
-}
- 
-function formatNominatimAddress(r){
-  // Build a clean, specific Indian address from address components
-  var a = r.address || {};
-  var parts = [];
-  // Street level
-  if(a.road || a.pedestrian || a.path) parts.push(a.road || a.pedestrian || a.path);
-  if(a.house_number) parts.unshift(a.house_number);
-  // Neighbourhood / locality
-  if(a.neighbourhood || a.quarter || a.suburb) parts.push(a.neighbourhood || a.quarter || a.suburb);
-  // Area / locality
-  if(a.village || a.town || a.city_district) parts.push(a.village || a.town || a.city_district);
-  // City
-  var city = a.city || a.municipality || a.county;
-  if(city) parts.push(city);
-  // State
-  if(a.state) parts.push(a.state);
-  // Postcode
-  if(a.postcode) parts.push(a.postcode);
-  return parts.filter(Boolean).join(', ');
-}
- 
-function escHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
  
 // ── MAP PICKER ──
 var _mapPicker = null, _mapMarker = null;
 var CITY_CENTRES = {
-  'Mumbai':{ lat:19.076, lng:72.877, zoom:13},
-  'Delhi':{ lat:28.644, lng:77.216, zoom:12},
-  'New Delhi':{ lat:28.644, lng:77.216, zoom:13},
-  'Bengaluru':{ lat:12.972, lng:77.594, zoom:13},
-  'Kolkata':{ lat:22.572, lng:88.363, zoom:13},
-  'Chennai':{ lat:13.083, lng:80.270, zoom:13},
-  'Hyderabad':{ lat:17.385, lng:78.486, zoom:13},
-  'Pune':{ lat:18.520, lng:73.856, zoom:13},
-  'Ahmedabad':{ lat:23.023, lng:72.572, zoom:13},
-  'Jaipur':{ lat:26.912, lng:75.787, zoom:13},
-  'Lucknow':{ lat:26.846, lng:80.946, zoom:13},
-  'Surat':{ lat:21.170, lng:72.831, zoom:13}
+  'Mumbai':{ lat:19.076, lng:72.877, zoom:12},
+  'Delhi':{ lat:28.644, lng:77.216, zoom:11},
+  'New Delhi':{ lat:28.644, lng:77.216, zoom:12},
+  'Bengaluru':{ lat:12.972, lng:77.594, zoom:12},
+  'Kolkata':{ lat:22.572, lng:88.363, zoom:12},
+  'Chennai':{ lat:13.083, lng:80.270, zoom:12},
+  'Hyderabad':{ lat:17.385, lng:78.486, zoom:12},
+  'Pune':{ lat:18.520, lng:73.856, zoom:12},
+  'Ahmedabad':{ lat:23.023, lng:72.572, zoom:12},
+  'Jaipur':{ lat:26.912, lng:75.787, zoom:12},
+  'Lucknow':{ lat:26.846, lng:80.946, zoom:12},
+  'Surat':{ lat:21.170, lng:72.831, zoom:12}
 };
  
-function initMapPicker(latOrHint, lng, zoom){
+function initMapPicker(locationHint){
   var container = document.getElementById('vendor-map-picker');
   if(!container) return;
-  var lat0 = 20.5937, lng0 = 78.9629, z0 = 5;
- 
-  if(typeof latOrHint === 'number' || (typeof latOrHint === 'string' && !isNaN(parseFloat(latOrHint)))){
-    // Called with explicit coords
-    lat0 = parseFloat(latOrHint); lng0 = parseFloat(lng); z0 = zoom || 16;
-  } else if(typeof latOrHint === 'string'){
-    // Called with a city/location name
-    var hint = latOrHint;
-    var city = hint.split(/,|—/)[0].trim().replace(/Mumbai\s*—\s*/i,'');
-    if(hint.toLowerCase().includes('mumbai')){ lat0=19.076; lng0=72.877; z0=14; }
-    else if(CITY_CENTRES[city]){ lat0=CITY_CENTRES[city].lat; lng0=CITY_CENTRES[city].lng; z0=CITY_CENTRES[city].zoom; }
+  var lat=20.5937, lng=78.9629, zoom=5;
+  if(locationHint){
+    var city = locationHint.split(/,|—/)[0].trim().replace(/Mumbai\s*—\s*/,'');
+    if(locationHint.toLowerCase().includes('mumbai')){ lat=19.076; lng=72.877; zoom=13; }
+    else if(CITY_CENTRES[city]){ lat=CITY_CENTRES[city].lat; lng=CITY_CENTRES[city].lng; zoom=CITY_CENTRES[city].zoom; }
   }
- 
-  if(_mapPicker){
-    _mapPicker.setView([lat0, lng0], z0);
-    if(typeof latOrHint==='number'||!isNaN(parseFloat(latOrHint))){
-      if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
-      _mapMarker = L.marker([lat0,lng0]).addTo(_mapPicker);
-    }
-    return;
-  }
- 
+  if(_mapPicker){ _mapPicker.remove(); _mapPicker=null; _mapMarker=null; }
+  // Show the map container
   container.style.height='200px';
   setTimeout(function(){
-    _mapPicker = L.map('vendor-map-picker', {zoomControl:true}).setView([lat0,lng0],z0);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a>',
-      maxZoom:19
-    }).addTo(_mapPicker);
- 
-    _mapPicker.on('click', function(e){
-      var la = e.latlng.lat, ln = e.latlng.lng;
+    _mapPicker = L.map('vendor-map-picker').setView([lat,lng],zoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(_mapPicker);
+    _mapPicker.on('click',function(e){
+      var la=e.latlng.lat.toFixed(6), ln=e.latlng.lng.toFixed(6);
+      document.getElementById('f-lat').value=la;
+      document.getElementById('f-lng').value=ln;
+      document.getElementById('vendor-map-coords').textContent='📍 '+la+', '+ln;
       if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
       _mapMarker = L.marker([la,ln]).addTo(_mapPicker);
-      document.getElementById('f-lat').value = la.toFixed(6);
-      document.getElementById('f-lng').value = ln.toFixed(6);
-      document.getElementById('vendor-map-coords').textContent = '⏳ पता खोजा जा रहा है…';
-      // Reverse geocode with Nominatim to get full address
-      reverseGeocode(la, ln);
     });
-  }, 150);
-}
- 
-function reverseGeocode(lat, lng){
-  var url = 'https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&lat='+lat+'&lon='+lng+'&zoom=18';
-  fetch(url, {headers:{'Accept-Language':'en'}})
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var addr = formatNominatimAddress(data);
-      if(addr){
-        document.getElementById('f-loc-text').value = addr;
-        document.getElementById('f-loc-value').value = addr;
-        document.getElementById('vendor-map-coords').textContent = '📍 '+addr;
-      } else {
-        document.getElementById('vendor-map-coords').textContent = '📍 '+lat.toFixed(5)+', '+lng.toFixed(5);
-      }
-    })
-    .catch(function(){
-      document.getElementById('vendor-map-coords').textContent = '📍 '+parseFloat(lat).toFixed(5)+', '+parseFloat(lng).toFixed(5);
-    });
+  },120);
 }
  
 // ── TRANSLATIONS APPLY ──
@@ -918,7 +872,20 @@ function applyTranslations(){
     fbtnOffer:'fbtn-offer', fbtnSpec:'fbtn-spec', publishBtn:'publish-btn',
     about1t:'about1-t', about1b:'about1-b', about2t:'about2-t', about2b:'about2-b', about3t:'about3-t', about3b:'about3-b'
   };
+  // For label IDs that contain req asterisks, we must use innerHTML not textContent
+  // Separate the req-asterisk labels from plain ones
+  var REQ_LABELS = {
+    flVname:'fl-vname', flLoc:'fl-loc', flCat:'fl-cat', flTeam:'fl-team',
+    flDesc:'fl-desc', flOffers:'fl-offers', flSpec:'fl-spec', flPhone:'fl-phone'
+  };
+  Object.keys(REQ_LABELS).forEach(function(k){
+    var el = document.getElementById(REQ_LABELS[k]);
+    if(el) el.innerHTML = t(k)+' <span class="req">*</span>';
+  });
+ 
+  // Plain text labels (no asterisk)
   Object.keys(idMap).forEach(function(k){
+    if(REQ_LABELS[k]) return; // already handled
     var el = document.getElementById(idMap[k]);
     if(el) el.textContent = t(k);
   });
@@ -945,6 +912,13 @@ function applyTranslations(){
   // QR close btn text
   var qrc = document.querySelector('.qr-close');
   if(qrc) qrc.textContent = '✕ '+(currentLang==='en'?'Close':currentLang==='mr'?'बंद करा':'बंद करें');
+  // Form card titles that need req asterisks preserved
+  var fcOffers = document.getElementById('fc-offers');
+  if(fcOffers) fcOffers.innerHTML = t('fcOffers')+' <span class="req" style="font-size:10px;">*</span>';
+  var fcSpec = document.getElementById('fc-spec');
+  if(fcSpec) fcSpec.innerHTML = t('fcSpec')+' <span class="req" style="font-size:10px;">*</span>';
+  var fcAbout = document.getElementById('fc-about');
+  if(fcAbout) fcAbout.innerHTML = t('fcAbout')+' <span class="req" style="font-size:10px;">*</span>';
   // Font
   document.querySelectorAll('.field input,.field textarea,.field select,.loc-text-input').forEach(function(el){
     el.style.fontFamily = t('inputFont');
@@ -1075,6 +1049,8 @@ function openVendor(id){
     :'';
  
   var isOwner=currentUser&&v.ownerId&&v.ownerId===currentUser.id;
+  var alreadyReviewed=currentUser&&v.reviews&&v.reviews.some(function(r){return r.ownerId===currentUser.id;});
+ 
   var ownerBtns=isOwner
     ?'<div class="vendor-owner-btns">'+
       '<button class="btn-edit-vendor" data-vid="'+id+'">✏️ '+t('editVendorBtn')+'</button>'+
@@ -1082,12 +1058,13 @@ function openVendor(id){
       '</div>'
     :'';
  
-  var mapLink=(v.lat&&v.lng)
-    ?'&nbsp;<a href="https://www.openstreetmap.org/?mlat='+v.lat+'&mlon='+v.lng+'&zoom=16" target="_blank" style="color:var(--gold);font-size:12px;text-decoration:none;">🗺️ '+t('viewOnMap')+'</a>'
+  // Google Maps link — coords give pinpoint accuracy, text gives address search
+  var gmapsUrl=v.lat&&v.lng
+    ?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v.lat+','+v.lng)
+    :(v.loc?'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v.loc):'');
+  var mapLink=gmapsUrl
+    ?'<div style="margin-top:5px;"><a href="'+gmapsUrl+'" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--gold);font-size:12px;font-weight:600;text-decoration:none;background:rgba(201,169,110,0.1);padding:4px 10px;border-radius:10px;border:1px solid rgba(201,169,110,0.3);">🗺️ '+t('viewOnMap')+'</a></div>'
     :'';
- 
-  var isVendorOwner=currentUser&&v.ownerId&&v.ownerId===currentUser.id;
-  var alreadyReviewed=currentUser&&v.reviews&&v.reviews.some(function(r){return r.ownerId===currentUser.id;});
  
   var reviewForm;
   if(!currentUser){
@@ -1096,13 +1073,13 @@ function openVendor(id){
       '<div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:12px;">'+t('signInToReview')+'</div>'+
       '<div id="google-review-btn" style="display:flex;justify-content:center;"></div>'+
       '</div>';
-  } else if(isVendorOwner){
-    reviewForm='<div class="add-review" style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">'+
-      (currentLang==='en'?'You cannot review your own shop.':currentLang==='mr'?'तुम्ही स्वतःच्या दुकानाची समीक्षा लिहू शकत नाही.':'आप अपनी दुकान की समीक्षा नहीं लिख सकते।')+
+  } else if(isOwner){
+    reviewForm='<div class="add-review" style="text-align:center;padding:14px 16px;color:var(--muted);font-size:13px;">'+
+      '🏪 '+(currentLang==='en'?'You cannot review your own shop.':currentLang==='mr'?'तुम्ही स्वतःच्या दुकानाची समीक्षा लिहू शकत नाही.':'आप अपनी दुकान की समीक्षा नहीं लिख सकते।')+
       '</div>';
   } else if(alreadyReviewed){
-    reviewForm='<div class="add-review" style="text-align:center;padding:16px;color:var(--muted);font-size:13px;">'+
-      (currentLang==='en'?'You have already reviewed this shop.':currentLang==='mr'?'तुम्ही आधीच या दुकानाची समीक्षा दिली आहे.':'आपने इस दुकान की समीक्षा पहले से दी है।')+
+    reviewForm='<div class="add-review" style="text-align:center;padding:14px 16px;color:var(--muted);font-size:13px;">'+
+      '✅ '+(currentLang==='en'?'You have already reviewed this shop.':currentLang==='mr'?'तुम्ही आधीच या दुकानाची समीक्षा दिली आहे.':'आपने इस दुकान की समीक्षा पहले से दी है।')+
       '</div>';
   } else {
     reviewForm='<div class="add-review">'+
@@ -1133,15 +1110,15 @@ function openVendor(id){
     '</div>'+
     '<div>'+
     '<div class="detail-card" style="margin-bottom:14px;"><div class="detail-label">'+t('detailDetails')+'</div>'+
-    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val">'+v.loc+mapLink+'</span></div>'+
+    '<div class="contact-row"><span class="contact-lbl">'+t('plLoc')+'</span><span class="contact-val" style="font-size:12px;">'+v.loc+mapLink+'</span></div>'+
     (v.year?'<div class="contact-row"><span class="contact-lbl">'+t('plYear')+'</span><span class="contact-val">'+v.year+'</span></div>':'')+
     '<div class="contact-row"><span class="contact-lbl">'+t('plTeam')+'</span><span class="contact-val">'+v.team+'</span></div>'+
     '</div>'+
     '<div class="detail-card"><div class="detail-label">'+t('detailContact')+'</div>'+
     '<div class="contact-row"><span class="contact-lbl">'+t('plPhone')+'</span><span class="contact-val">'+v.phone+'</span></div>'+
     (v.wa?'<div class="contact-row"><span class="contact-lbl">'+t('plWa')+'</span><span class="contact-val">'+v.wa+'</span></div>':'')+
-    (v.email?'<div class="contact-row"><span class="contact-lbl">'+t('plEmail')+'</span><span class="contact-val">'+v.email+'</span></div>':'')+
-    (v.web?'<div class="contact-row"><span class="contact-lbl">'+t('plWeb')+'</span><span class="contact-val">'+v.web+'</span></div>':'')+
+    (v.email?'<div class="contact-row"><span class="contact-lbl">'+t('plEmail')+'</span><span class="contact-val" style="font-size:12px;">'+v.email+'</span></div>':'')+
+    (v.web?'<div class="contact-row"><span class="contact-lbl">'+t('plWeb')+'</span><span class="contact-val" style="font-size:12px;">'+v.web+'</span></div>':'')+
     '</div></div></div>'+
  
     '<div class="share-section">'+
@@ -1191,23 +1168,10 @@ function setStars(n){
 // ── SUBMIT / EDIT REVIEWS ──
 function submitReview(vid){
   if(!requireLogin()) return;
-  var v=vendors.find(function(x){return x.id===vid;});
-  if(!v) return;
- 
-  // Block vendor owner from reviewing their own shop
-  if(v.ownerId && v.ownerId === currentUser.id){
-    showToast(currentLang==='en'?'You cannot review your own shop.':currentLang==='mr'?'तुम्ही स्वतःच्या दुकानाची समीक्षा लिहू शकत नाही.':'आप अपनी दुकान की समीक्षा नहीं लिख सकते।');
-    return;
-  }
- 
-  // Block duplicate reviews (one per user per vendor)
-  if(v.reviews && v.reviews.some(function(r){ return r.ownerId === currentUser.id; })){
-    showToast(currentLang==='en'?'You have already reviewed this shop.':currentLang==='mr'?'तुम्ही आधीच या दुकानाची समीक्षा दिली आहे.':'आपने इस दुकान की समीक्षा पहले से दी है।');
-    return;
-  }
- 
   var text=(document.getElementById('review-text').value||'').trim();
   if(!text||!selectedStars){showToast(t('fillFields'));return;}
+  var v=vendors.find(function(x){return x.id===vid;});
+  if(!v) return;
   if(!v.reviews) v.reviews=[];
   var months={hi:['जनवरी','फरवरी','मार्च','अप्रैल','मई','जून','जुलाई','अगस्त','सितंबर','अक्टूबर','नवंबर','दिसंबर'],en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],mr:['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर']};
   var d=new Date(); var dateStr=months[currentLang][d.getMonth()]+' '+d.getFullYear();
@@ -1324,12 +1288,15 @@ function fillFormForEdit(v){
   fOffersList=[...(v.offers||[])]; fSpecsList=[...(v.specs||[])];
   renderTagList('f-offers-tags',fOffersList); renderTagList('f-specs-tags',fSpecsList);
   // Init map
-  initMapPicker(v.loc||'');
+  initMapPicker(v.loc);
   if(v.lat&&v.lng){
     setTimeout(function(){
-      initMapPicker(parseFloat(v.lat), parseFloat(v.lng), 16);
-      document.getElementById('vendor-map-coords').textContent='📍 '+(v.loc||v.lat+', '+v.lng);
-    },300);
+      if(_mapPicker){
+        _mapPicker.setView([v.lat,v.lng],15);
+        if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
+        _mapMarker=L.marker([v.lat,v.lng]).addTo(_mapPicker);
+      }
+    },250);
   }
 }
  
@@ -1520,18 +1487,27 @@ document.addEventListener('DOMContentLoaded',function(){
   // Location autocomplete init
   initLocationField('f-loc-text','f-loc-value','loc-suggestions');
  
-  // Init map when register page is first visited
-  document.getElementById('nav-register').addEventListener('click', function(){
-    setTimeout(function(){ if(!_mapPicker) initMapPicker(''); }, 200);
+  // When user finishes typing, update hidden value AND reposition map via geocoding
+  document.getElementById('f-loc-text').addEventListener('blur', function(){
+    var q = this.value.trim();
+    if(!q) return;
+    document.getElementById('f-loc-value').value = q;
+    // Geocode the typed text to position the map
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept-Language':'en'}})
+      .then(function(r){return r.json();})
+      .then(function(res){
+        if(res&&res.length){
+          var lat=parseFloat(res[0].lat), lng=parseFloat(res[0].lon);
+          if(!_mapPicker){ initMapPicker(lat, lng, 15); }
+          else { _mapPicker.setView([lat,lng],15); }
+        } else if(!_mapPicker){ initMapPicker(q); }
+      }).catch(function(){ if(!_mapPicker) initMapPicker(q); });
   });
  
-  // Also init map when typing a new location manually (after autocomplete clears)
-  var locInp = document.getElementById('f-loc-text');
-  if(locInp){
-    locInp.addEventListener('blur', function(){
-      if(this.value && !_mapPicker) initMapPicker(this.value);
-    });
-  }
+  // Also handle 'change' event for browser autofill edge cases
+  document.getElementById('f-loc-text').addEventListener('change', function(){
+    document.getElementById('f-loc-value').value = this.value;
+  });
  
   // Deep link on load
   var hash=window.location.hash;
@@ -1551,4 +1527,3 @@ window.addEventListener('load',function(){
 </script>
 </body>
 </html>
- 
