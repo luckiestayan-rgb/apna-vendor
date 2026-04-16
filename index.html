@@ -181,7 +181,14 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
 .loc-suggestion-state{font-size:11px;color:var(--muted);}
 .map-picker-wrap{margin-top:8px;}
 .map-hint{font-size:11px;color:var(--muted);margin-bottom:5px;}
-#vendor-map-picker{width:100%;height:200px;border-radius:8px;border:1px solid var(--border);overflow:hidden;}
+#vendor-map-picker{width:100%;height:200px;border-radius:8px;border:1px solid var(--border);overflow:hidden;position:relative;z-index:0;}
+#vendor-map-picker .leaflet-pane,#vendor-map-picker .leaflet-map-pane{z-index:1 !important;}
+#vendor-map-picker .leaflet-tile-pane{z-index:1 !important;}
+#vendor-map-picker .leaflet-overlay-pane{z-index:2 !important;}
+#vendor-map-picker .leaflet-marker-pane{z-index:3 !important;}
+#vendor-map-picker .leaflet-tooltip-pane{z-index:4 !important;}
+#vendor-map-picker .leaflet-popup-pane{z-index:5 !important;}
+#vendor-map-picker .leaflet-top,#vendor-map-picker .leaflet-bottom{z-index:6 !important;}
 .map-coords{font-size:11px;color:var(--green);margin-top:4px;min-height:16px;}
 
 /* ABOUT */
@@ -357,8 +364,8 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
         <div style="display:flex;flex-direction:column;gap:16px;">
           <div class="form-card">
             <div class="form-card-title" id="fc-identity">दुकान की पहचान</div>
-            <div class="field"><label id="fl-vname">व्यापार का नाम <span class="req">*</span></label><input type="text" id="f-vname"></div>
-            <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline" placeholder="जैसे: ताज़ा खाना, हर दिन"></div>
+            <div class="field"><label id="fl-vname">व्यापार का नाम <span class="req">*</span></label><input type="text" id="f-vname" placeholder=""></div>
+            <div class="field"><label id="fl-tagline">टैगलाइन</label><input type="text" id="f-tagline" placeholder=""></div>
             <div class="row2">
               <div class="field"><label id="fl-cat">श्रेणी <span class="req">*</span></label>
                 <select id="f-cat"><option value="">चुनें...</option></select>
@@ -375,7 +382,7 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
             <div class="field">
               <label id="fl-loc">शहर / स्थान <span class="req">*</span></label>
               <div class="loc-input-wrap">
-                <input type="text" class="loc-text-input" id="f-loc-text" placeholder="जैसे: Andheri, Mumbai, Maharashtra" autocomplete="off">
+                <input type="text" class="loc-text-input" id="f-loc-text" placeholder="" autocomplete="off">
                 <div class="loc-suggestions" id="loc-suggestions"></div>
               </div>
               <input type="hidden" id="f-loc-value">
@@ -400,11 +407,11 @@ nav{background:var(--navy);padding:0 24px;display:flex;align-items:center;justif
           <div class="form-card">
             <div class="form-card-title" id="fc-contact">संपर्क जानकारी</div>
             <div class="row2">
-              <div class="field"><label id="fl-phone">फोन नंबर <span class="req">*</span></label><input type="tel" id="f-phone" placeholder="+91 98765 43210"></div>
-              <div class="field"><label id="fl-wa">WhatsApp</label><input type="tel" id="f-wa"></div>
+              <div class="field"><label id="fl-phone">फोन नंबर <span class="req">*</span></label><input type="tel" id="f-phone" placeholder=""></div>
+              <div class="field"><label id="fl-wa">WhatsApp</label><input type="tel" id="f-wa" placeholder=""></div>
             </div>
-            <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email" placeholder="dukaan@example.com"></div>
-            <div class="field"><label id="fl-web">वेबसाइट</label><input type="text" id="f-web" placeholder="www.example.com"></div>
+            <div class="field"><label id="fl-email">ईमेल</label><input type="email" id="f-email" placeholder=""></div>
+            <div class="field"><label id="fl-web">वेबसाइट</label><input type="text" id="f-web" placeholder=""></div>
           </div>
         </div>
 
@@ -539,7 +546,12 @@ var T = {
     signInToRegister:'दुकान पंजीकृत करने के लिए साइन इन करें',
     signInToRegisterSub:'अपनी डिजिटल पहचान बनाने के लिए Google से साइन इन करें।',
     signInToReview:'समीक्षा लिखने के लिए Google से साइन इन करें।',
-    qrTitle:'यह QR कोड स्कैन करें', qrSub:'प्रोफ़ाइल खोलने के लिए'
+    qrTitle:'यह QR कोड स्कैन करें', qrSub:'प्रोफ़ाइल खोलने के लिए',
+    phVname:'जैसे: शर्मा कैटरर्स', phTagline:'जैसे: ताज़ा खाना, हर दिन',
+    phLoc:'पता टाइप करें या मानचित्र पर क्लिक करें...', phYear:'2015',
+    phPhone:'+91 98765 43210', phWa:'+91 98765 43210',
+    phEmail:'dukaan@example.com', phWeb:'www.example.com',
+    phOfferInput:'जैसे: शादी का खाना', phSpecInput:'जैसे: 24 घंटे उपलब्ध'
   },
   en:{
     navHome:'Home', navVendors:'Vendors', navRegister:'Register', navAbout:'About',
@@ -598,7 +610,12 @@ var T = {
     signInToRegister:'Sign in to Register Your Shop',
     signInToRegisterSub:'Sign in with Google to build your digital presence.',
     signInToReview:'Sign in with Google to leave a review.',
-    qrTitle:'Scan this QR code', qrSub:'to open this profile'
+    qrTitle:'Scan this QR code', qrSub:'to open this profile',
+    phVname:'e.g. Sharma Caterers', phTagline:'e.g. Fresh food, every day',
+    phLoc:'Type your address or click on the map...', phYear:'2015',
+    phPhone:'+91 98765 43210', phWa:'+91 98765 43210',
+    phEmail:'shop@example.com', phWeb:'www.example.com',
+    phOfferInput:'e.g. Wedding catering', phSpecInput:'e.g. Available 24 hours'
   },
   mr:{
     navHome:'होम', navVendors:'विक्रेते', navRegister:'नोंदणी', navAbout:'आमच्याबद्दल',
@@ -657,7 +674,12 @@ var T = {
     signInToRegister:'दुकान नोंदवण्यासाठी साइन इन करा',
     signInToRegisterSub:'तुमची डिजिटल ओळख तयार करण्यासाठी Google ने साइन इन करा.',
     signInToReview:'समीक्षा लिहण्यासाठी Google ने साइन इन करा.',
-    qrTitle:'हा QR कोड स्कॅन करा', qrSub:'प्रोफाइल उघडण्यासाठी'
+    qrTitle:'हा QR कोड स्कॅन करा', qrSub:'प्रोफाइल उघडण्यासाठी',
+    phVname:'उदा: शर्मा केटरर्स', phTagline:'उदा: ताजे जेवण, रोज',
+    phLoc:'पत्ता टाइप करा किंवा नकाशावर क्लिक करा...', phYear:'2015',
+    phPhone:'+91 98765 43210', phWa:'+91 98765 43210',
+    phEmail:'dukaan@example.com', phWeb:'www.example.com',
+    phOfferInput:'उदा: लग्नाचे जेवण', phSpecInput:'उदा: 24 तास उपलब्ध'
   }
 };
 
@@ -724,10 +746,22 @@ function saveVendors(){ localStorage.setItem('av_vendors',JSON.stringify(vendors
 function updateStats(){
   var ce = document.getElementById('stat-count');
   if(ce) ce.textContent = vendors.length;
-  var locs = {};
-  vendors.forEach(function(v){ if(v.loc) v.loc.split(',').forEach(function(p){ var x=p.trim(); if(x) locs[x.toLowerCase()]=1; }); });
+  // Count unique states — the state is the last segment after the last comma in the location string
+  var states = {};
+  vendors.forEach(function(v){
+    if(!v.loc) return;
+    var parts = v.loc.split(',');
+    // Last meaningful part that looks like a state (skip postcodes which are all digits)
+    for(var i = parts.length-1; i >= 0; i--){
+      var p = parts[i].trim();
+      if(p && !/^\d+$/.test(p)){
+        states[p.toLowerCase()] = 1;
+        break;
+      }
+    }
+  });
   var se = document.getElementById('stat-states');
-  if(se) se.textContent = Object.keys(locs).length||0;
+  if(se) se.textContent = Object.keys(states).length || 0;
 }
 
 // ── INDIA LOCATIONS DATA ──
@@ -816,44 +850,90 @@ function initLocationField(textId, hiddenId, suggestId){
 // ── MAP PICKER ──
 var _mapPicker = null, _mapMarker = null;
 var CITY_CENTRES = {
-  'Mumbai':{ lat:19.076, lng:72.877, zoom:12},
-  'Delhi':{ lat:28.644, lng:77.216, zoom:11},
-  'New Delhi':{ lat:28.644, lng:77.216, zoom:12},
-  'Bengaluru':{ lat:12.972, lng:77.594, zoom:12},
-  'Kolkata':{ lat:22.572, lng:88.363, zoom:12},
-  'Chennai':{ lat:13.083, lng:80.270, zoom:12},
-  'Hyderabad':{ lat:17.385, lng:78.486, zoom:12},
-  'Pune':{ lat:18.520, lng:73.856, zoom:12},
-  'Ahmedabad':{ lat:23.023, lng:72.572, zoom:12},
-  'Jaipur':{ lat:26.912, lng:75.787, zoom:12},
-  'Lucknow':{ lat:26.846, lng:80.946, zoom:12},
-  'Surat':{ lat:21.170, lng:72.831, zoom:12}
+  'Mumbai':{lat:19.076,lng:72.877,zoom:13},'Delhi':{lat:28.644,lng:77.216,zoom:12},
+  'New Delhi':{lat:28.644,lng:77.216,zoom:13},'Bengaluru':{lat:12.972,lng:77.594,zoom:13},
+  'Kolkata':{lat:22.572,lng:88.363,zoom:13},'Chennai':{lat:13.083,lng:80.270,zoom:13},
+  'Hyderabad':{lat:17.385,lng:78.486,zoom:13},'Pune':{lat:18.520,lng:73.856,zoom:13},
+  'Ahmedabad':{lat:23.023,lng:72.572,zoom:13},'Jaipur':{lat:26.912,lng:75.787,zoom:13},
+  'Lucknow':{lat:26.846,lng:80.946,zoom:13},'Surat':{lat:21.170,lng:72.831,zoom:13}
 };
 
-function initMapPicker(locationHint){
+// Can be called as initMapPicker(locationHintString) or initMapPicker(lat, lng, zoom)
+function initMapPicker(latOrHint, lngArg, zoomArg){
   var container = document.getElementById('vendor-map-picker');
   if(!container) return;
-  var lat=20.5937, lng=78.9629, zoom=5;
-  if(locationHint){
-    var city = locationHint.split(/,|—/)[0].trim().replace(/Mumbai\s*—\s*/,'');
-    if(locationHint.toLowerCase().includes('mumbai')){ lat=19.076; lng=72.877; zoom=13; }
+  var lat=20.5937, lng=78.9629, zoom=5, hasCoords=false;
+
+  if(typeof latOrHint === 'number' || (typeof latOrHint === 'string' && latOrHint !== '' && !isNaN(parseFloat(latOrHint)) && lngArg !== undefined)){
+    lat=parseFloat(latOrHint); lng=parseFloat(lngArg); zoom=zoomArg||15; hasCoords=true;
+  } else if(typeof latOrHint === 'string' && latOrHint){
+    var hint = latOrHint;
+    var city = hint.split(/,|—/)[0].trim().replace(/Mumbai\s*—\s*/i,'');
+    if(hint.toLowerCase().includes('mumbai')){ lat=19.076; lng=72.877; zoom=14; }
     else if(CITY_CENTRES[city]){ lat=CITY_CENTRES[city].lat; lng=CITY_CENTRES[city].lng; zoom=CITY_CENTRES[city].zoom; }
   }
-  if(_mapPicker){ _mapPicker.remove(); _mapPicker=null; _mapMarker=null; }
-  // Show the map container
-  container.style.height='200px';
+
+  // If map already exists, just pan to new location (avoid destroying/rebuilding)
+  if(_mapPicker){
+    _mapPicker.setView([lat,lng],zoom);
+    if(hasCoords){
+      if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
+      _mapMarker = L.marker([lat,lng]).addTo(_mapPicker);
+    }
+    return;
+  }
+
+  // First-time init
+  container.style.height='210px';
   setTimeout(function(){
-    _mapPicker = L.map('vendor-map-picker').setView([lat,lng],zoom);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:19}).addTo(_mapPicker);
+    if(_mapPicker) return; // guard against double-init
+    _mapPicker = L.map('vendor-map-picker',{zoomControl:true}).setView([lat,lng],zoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© OpenStreetMap',maxZoom:19
+    }).addTo(_mapPicker);
+
+    if(hasCoords){
+      _mapMarker = L.marker([lat,lng]).addTo(_mapPicker);
+    }
+
     _mapPicker.on('click',function(e){
-      var la=e.latlng.lat.toFixed(6), ln=e.latlng.lng.toFixed(6);
-      document.getElementById('f-lat').value=la;
-      document.getElementById('f-lng').value=ln;
-      document.getElementById('vendor-map-coords').textContent='📍 '+la+', '+ln;
+      var la=e.latlng.lat, ln=e.latlng.lng;
+      document.getElementById('f-lat').value=la.toFixed(6);
+      document.getElementById('f-lng').value=ln.toFixed(6);
       if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
       _mapMarker = L.marker([la,ln]).addTo(_mapPicker);
+      document.getElementById('vendor-map-coords').textContent='⏳ '+(currentLang==='en'?'Finding address...':currentLang==='mr'?'पत्ता शोधत आहे...':'पता खोजा जा रहा है...');
+      // Reverse geocode to get full address
+      fetch('https://nominatim.openstreetmap.org/reverse?format=json&addressdetails=1&lat='+la+'&lon='+ln+'&zoom=18',{headers:{'Accept-Language':'en'}})
+        .then(function(r){return r.json();})
+        .then(function(data){
+          var addr = formatAddress(data);
+          if(addr){
+            document.getElementById('f-loc-text').value = addr;
+            document.getElementById('f-loc-value').value = addr;
+            document.getElementById('vendor-map-coords').textContent = '📍 '+addr;
+          } else {
+            document.getElementById('vendor-map-coords').textContent = '📍 '+la.toFixed(5)+', '+ln.toFixed(5);
+          }
+        })
+        .catch(function(){
+          document.getElementById('vendor-map-coords').textContent = '📍 '+la.toFixed(5)+', '+ln.toFixed(5);
+        });
     });
-  },120);
+  },150);
+}
+
+function formatAddress(data){
+  if(!data||!data.address) return '';
+  var a=data.address, parts=[];
+  if(a.house_number) parts.push(a.house_number);
+  if(a.road||a.pedestrian||a.path) parts.push(a.road||a.pedestrian||a.path);
+  if(a.neighbourhood||a.quarter||a.suburb) parts.push(a.neighbourhood||a.quarter||a.suburb);
+  if(a.village||a.town||a.city_district) parts.push(a.village||a.town||a.city_district);
+  if(a.city||a.municipality) parts.push(a.city||a.municipality);
+  if(a.state) parts.push(a.state);
+  if(a.postcode) parts.push(a.postcode);
+  return parts.filter(Boolean).join(', ');
 }
 
 // ── TRANSLATIONS APPLY ──
@@ -866,14 +946,20 @@ function applyTranslations(){
     vendorsTitle:'vendors-title', vendorsSub:'vendors-sub', regTitle:'reg-title', regSub:'reg-sub',
     aboutTitle:'about-title', aboutSub:'about-sub', homeWhyTitle:'home-why-title', homeWhySub:'home-why-sub',
     why1t:'why1-t', why1b:'why1-b', why2t:'why2-t', why2b:'why2-b', why3t:'why3-t', why3b:'why3-b', why4t:'why4-t', why4b:'why4-b',
-    fcIdentity:'fc-identity', fcAbout:'fc-about', fcOffers:'fc-offers', fcSpec:'fc-spec', fcContact:'fc-contact', fcLocation:'fc-location',
-    flVname:'fl-vname', flTagline:'fl-tagline', flCat:'fl-cat', flLoc:'fl-loc', flYear:'fl-year', flTeam:'fl-team',
-    flDesc:'fl-desc', flOffers:'fl-offers', flSpec:'fl-spec', flPhone:'fl-phone', flWa:'fl-wa', flEmail:'fl-email', flWeb:'fl-web', flMap:'fl-map',
+    fcIdentity:'fc-identity', fcLocation:'fc-location', fcContact:'fc-contact',
+    flTagline:'fl-tagline', flYear:'fl-year',
+    flWa:'fl-wa', flEmail:'fl-email', flWeb:'fl-web', flMap:'fl-map',
     fbtnOffer:'fbtn-offer', fbtnSpec:'fbtn-spec', publishBtn:'publish-btn',
     about1t:'about1-t', about1b:'about1-b', about2t:'about2-t', about2b:'about2-b', about3t:'about3-t', about3b:'about3-b'
   };
-  // For label IDs that contain req asterisks, we must use innerHTML not textContent
-  // Separate the req-asterisk labels from plain ones
+
+  // Plain textContent labels
+  Object.keys(idMap).forEach(function(k){
+    var el = document.getElementById(idMap[k]);
+    if(el) el.textContent = t(k);
+  });
+
+  // Labels that need req asterisks — use innerHTML
   var REQ_LABELS = {
     flVname:'fl-vname', flLoc:'fl-loc', flCat:'fl-cat', flTeam:'fl-team',
     flDesc:'fl-desc', flOffers:'fl-offers', flSpec:'fl-spec', flPhone:'fl-phone'
@@ -883,43 +969,54 @@ function applyTranslations(){
     if(el) el.innerHTML = t(k)+' <span class="req">*</span>';
   });
 
-  // Plain text labels (no asterisk)
-  Object.keys(idMap).forEach(function(k){
-    if(REQ_LABELS[k]) return; // already handled
-    var el = document.getElementById(idMap[k]);
-    if(el) el.textContent = t(k);
-  });
-  var si = document.getElementById('search-input');
-  if(si) si.placeholder = t('searchPlaceholder');
-  // Category filter
-  var cf = document.getElementById('cat-filter');
-  if(cf){ var cats=t('cats');
-    cf.innerHTML='<option value="">'+t('catAll')+'</option>'+cats.map(function(c){return'<option>'+c+'</option>';}).join('');
-  }
-  // Form category
-  var fc = document.getElementById('f-cat');
-  if(fc){ var cats2=t('cats');
-    fc.innerHTML='<option value="">'+t('catChoose')+'</option>'+cats2.map(function(c){return'<option>'+c+'</option>';}).join('')+'<option>'+t('catOther')+'</option>';
-  }
-  // Form team
-  var ft = document.getElementById('f-team');
-  if(ft){ ft.innerHTML='<option value="">'+t('teamChoose')+'</option>'+t('teams').map(function(s){return'<option>'+s+'</option>';}).join(''); }
-  // Confirm dialog
-  var cc = document.getElementById('confirm-cancel-btn');
-  if(cc) cc.textContent = t('confirmCancel');
-  var co = document.getElementById('confirm-ok-btn');
-  if(co) co.textContent = t('confirmOk');
-  // QR close btn text
-  var qrc = document.querySelector('.qr-close');
-  if(qrc) qrc.textContent = '✕ '+(currentLang==='en'?'Close':currentLang==='mr'?'बंद करा':'बंद करें');
-  // Form card titles that need req asterisks preserved
+  // Form card titles with req asterisks
   var fcOffers = document.getElementById('fc-offers');
   if(fcOffers) fcOffers.innerHTML = t('fcOffers')+' <span class="req" style="font-size:10px;">*</span>';
   var fcSpec = document.getElementById('fc-spec');
   if(fcSpec) fcSpec.innerHTML = t('fcSpec')+' <span class="req" style="font-size:10px;">*</span>';
   var fcAbout = document.getElementById('fc-about');
   if(fcAbout) fcAbout.innerHTML = t('fcAbout')+' <span class="req" style="font-size:10px;">*</span>';
-  // Font
+
+  // Search placeholder
+  var si = document.getElementById('search-input');
+  if(si) si.placeholder = t('searchPlaceholder');
+
+  // Input placeholders (translatable)
+  var phMap = {
+    'f-vname': 'phVname', 'f-tagline': 'phTagline', 'f-loc-text': 'phLoc',
+    'f-year': 'phYear', 'f-phone': 'phPhone', 'f-wa': 'phWa',
+    'f-email': 'phEmail', 'f-web': 'phWeb',
+    'f-offer-input': 'phOfferInput', 'f-spec-input': 'phSpecInput'
+  };
+  Object.keys(phMap).forEach(function(id){
+    var el = document.getElementById(id);
+    if(el && t(phMap[id]) !== phMap[id]) el.placeholder = t(phMap[id]);
+  });
+
+  // Category filter
+  var cf = document.getElementById('cat-filter');
+  if(cf){
+    var cats=t('cats');
+    cf.innerHTML='<option value="">'+t('catAll')+'</option>'+cats.map(function(c){return'<option>'+c+'</option>';}).join('');
+  }
+  // Form category
+  var fc = document.getElementById('f-cat');
+  if(fc){
+    var cats2=t('cats');
+    fc.innerHTML='<option value="">'+t('catChoose')+'</option>'+cats2.map(function(c){return'<option>'+c+'</option>';}).join('')+'<option>'+t('catOther')+'</option>';
+  }
+  // Form team
+  var ft = document.getElementById('f-team');
+  if(ft){ ft.innerHTML='<option value="">'+t('teamChoose')+'</option>'+t('teams').map(function(s){return'<option>'+s+'</option>';}).join(''); }
+  // Confirm dialog buttons
+  var cc = document.getElementById('confirm-cancel-btn');
+  if(cc) cc.textContent = t('confirmCancel');
+  var co = document.getElementById('confirm-ok-btn');
+  if(co) co.textContent = t('confirmOk');
+  // QR close button
+  var qrc = document.querySelector('.qr-close');
+  if(qrc) qrc.textContent = '✕ '+(currentLang==='en'?'Close':currentLang==='mr'?'बंद करा':'बंद करें');
+  // Font for form inputs
   document.querySelectorAll('.field input,.field textarea,.field select,.loc-text-input').forEach(function(el){
     el.style.fontFamily = t('inputFont');
   });
@@ -938,6 +1035,8 @@ function setLang(lang){
 // ── PAGES ──
 function showPage(p){
   if(p==='register' && !currentUser){ showSignInWall(); return; }
+  // Destroy map when leaving register so it reinits fresh on return
+  if(p !== 'register' && _mapPicker){ _mapPicker.remove(); _mapPicker=null; _mapMarker=null; }
   document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-link').forEach(function(el){el.classList.remove('active');});
   document.getElementById('page-'+p).classList.add('active');
@@ -1287,16 +1386,14 @@ function fillFormForEdit(v){
   // Tags
   fOffersList=[...(v.offers||[])]; fSpecsList=[...(v.specs||[])];
   renderTagList('f-offers-tags',fOffersList); renderTagList('f-specs-tags',fSpecsList);
-  // Init map
-  initMapPicker(v.loc);
+  // Init map — if vendor has coords use them, otherwise use location text
+  if(v.lat && v.lng){
+    setTimeout(function(){ initMapPicker(parseFloat(v.lat), parseFloat(v.lng), 16); }, 200);
+  } else if(v.loc){
+    setTimeout(function(){ initMapPicker(v.loc); }, 200);
+  }
   if(v.lat&&v.lng){
-    setTimeout(function(){
-      if(_mapPicker){
-        _mapPicker.setView([v.lat,v.lng],15);
-        if(_mapMarker) _mapPicker.removeLayer(_mapMarker);
-        _mapMarker=L.marker([v.lat,v.lng]).addTo(_mapPicker);
-      }
-    },250);
+    document.getElementById('vendor-map-coords').textContent='📍 '+(v.loc||v.lat+', '+v.lng);
   }
 }
 
@@ -1492,19 +1589,20 @@ document.addEventListener('DOMContentLoaded',function(){
     var q = this.value.trim();
     if(!q) return;
     document.getElementById('f-loc-value').value = q;
-    // Geocode the typed text to position the map
+    // Geocode typed text to position the map
     fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q='+encodeURIComponent(q),{headers:{'Accept-Language':'en'}})
       .then(function(r){return r.json();})
       .then(function(res){
         if(res&&res.length){
           var lat=parseFloat(res[0].lat), lng=parseFloat(res[0].lon);
-          if(!_mapPicker){ initMapPicker(lat, lng, 15); }
-          else { _mapPicker.setView([lat,lng],15); }
-        } else if(!_mapPicker){ initMapPicker(q); }
-      }).catch(function(){ if(!_mapPicker) initMapPicker(q); });
+          initMapPicker(lat, lng, 15);
+        } else {
+          initMapPicker(q); // fall back to city-centre lookup
+        }
+      }).catch(function(){ initMapPicker(q); });
   });
 
-  // Also handle 'change' event for browser autofill edge cases
+  // Sync hidden value on any change (browser autofill, paste, etc.)
   document.getElementById('f-loc-text').addEventListener('change', function(){
     document.getElementById('f-loc-value').value = this.value;
   });
